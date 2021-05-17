@@ -1,0 +1,82 @@
+/*QUERY SLIDE1*/
+
+SELECT category_family,SUM(count_rentals) rent_cat
+FROM(SELECT movie_title,category_family,count_rentals
+FROM (SELECT c.name category_family,f.title movie_title, COUNT(f.title)OVER (PARTITION BY f.title ORDER BY f.title) AS count_rentals
+FROM category c
+JOIN film_category fc 
+ON fc.category_id=c.category_id
+JOIN film f
+ON f.film_id=fc.film_id
+JOIN inventory i
+ON i.film_id=f.film_id
+JOIN rental r
+ON r.inventory_id=i.inventory_id
+WHERE c.name='Animation' OR c.name='Children' OR c.name='Classics' OR c.name='Comedy' OR c.name='Family' OR c.name='Music'
+)sub1
+GROUP BY 1,2,3
+ORDER BY 2,1)sub2
+GROUP BY 1
+ORDER BY 2 DESC
+
+
+/*QUERY SLIDE2*/
+
+SELECT DATE_PART ('year',r.rental_date)rental_year, DATE_PART ('month',r.rental_date)rental_month, i.store_id store_id,
+COUNT(*) count_rentals
+FROM rental r
+JOIN inventory i
+ON i.inventory_id=r.inventory_id
+GROUP BY 1,2,3
+ORDER BY 4 DESC
+
+
+
+
+/*QUERY SLIDE3*/
+
+SELECT dates,customer_name,paym_permonth,amount_month
+FROM(SELECT customer_name, dates,amount_month,paym_permonth, SUM (amount_month)OVER (PARTITION BY customer_name)overall
+FROM(SELECT customer_name, dates, SUM(pay_amount)amount_month,COUNT(*)paym_permonth
+FROM(SELECT CONCAT(c.first_name,' ',c.last_name) AS customer_name, p.payment_date pay_date,p.rental_id rent_id, 
+DATE_TRUNC ('month',p.payment_date)dates,p.amount pay_amount
+FROM payment p
+JOIN customer c
+ON c.customer_id=p.customer_id
+WHERE DATE_PART('year',p.payment_date)=2007
+)sub1
+
+GROUP BY 1,2)sub2
+ORDER BY 5 DESC
+LIMIT 34)sub3
+ORDER BY 2,1
+
+
+/*QUERY SLIDE4*/
+
+SELECT customer_name, dates,amount_month,paym_permonth, overall,lag_amount_month,order_dif
+FROM(SELECT customer_name, dates,amount_month,paym_permonth, overall, 
+LAG (amount_month) OVER (PARTITION BY customer_name ORDER BY dates) AS lag_amount_month,
+amount_month - LAG (amount_month) OVER (PARTITION BY customer_name) AS order_dif
+FROM (SELECT customer_name, dates,amount_month,paym_permonth, 
+	  SUM (amount_month)OVER (PARTITION BY customer_name ORDER BY customer_name)overall
+FROM(SELECT customer_name, dates, SUM(pay_amount)amount_month,COUNT(*)paym_permonth
+FROM(SELECT CONCAT(c.first_name,' ',c.last_name) AS customer_name, p.payment_date pay_date,p.rental_id rent_id, 
+DATE_TRUNC ('month',p.payment_date)dates,p.amount pay_amount
+FROM payment p
+JOIN customer c
+ON c.customer_id=p.customer_id
+WHERE DATE_PART('year',p.payment_date)=2007
+)sub1
+
+GROUP BY 1,2)sub2
+ORDER BY 5 DESC,1,2  
+LIMIT 34 
+)sub3
+
+ORDER BY 7 DESC)sub4
+
+WHERE order_dif>0
+
+
+

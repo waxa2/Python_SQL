@@ -1,0 +1,18 @@
+The resources I used:
+
+https://www.programiz.com/python-programming/datetime/strptime
+https://stackoverflow.com/questions/16766643/convert-date-string-to-day-of-week
+https://stackoverflow.com/questions/28009370/get-weekday-day-of-week-for-datetime-column-of-dataframe
+https://docs.python.org/2/library/datetime.html
+https://github.com/synflyn28/udacity-bikeshare/blob/master/bikeshare_2.py
+https://www.shanelynn.ie/select-pandas-dataframe-rows-and-columns-using-iloc-loc-and-ix/
+https://www.geeksforgeeks.org/python-string-split/
+https://www.geeksforgeeks.org/counting-the-frequencies-in-a-list-using-dictionary-in-python/
+https://www.youtube.com/watch?v=JtKOP-ThcbU
+https://www.programiz.com/python-programming/methods/dictionary/get
+https://www.w3schools.com/python/ref_dictionary_get.asp
+https://docs.python.org/3/tutorial/datastructures.html
+https://www.programiz.com/python-programming/dictionary
+https://www.w3resource.com/pandas/dataframe/dataframe-drop.php#:~:text=DataFrame%20%2D%20drop()%20function,removed%20by%20specifying%20the%20level.
+https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.drop.html
+https://www.shanelynn.ie/python-pandas-read_csv-load-data-from-csv-files/
